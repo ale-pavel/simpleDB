@@ -1,5 +1,7 @@
 package simpledb.buffer;
 
+import java.util.List;
+
 import simpledb.file.*;
 
 /**
@@ -10,6 +12,8 @@ import simpledb.file.*;
 class BasicBufferMgr {
    private Buffer[] bufferpool;
    private int numAvailable;
+   private List<PinUnpinListener> pinUnpinListeners;
+   private ChooseUnpinnedBufferStrategy unpinStrategy;
    
    /**
     * Creates a buffer manager having the specified number 
