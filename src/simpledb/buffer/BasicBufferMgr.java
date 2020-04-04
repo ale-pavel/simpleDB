@@ -1,5 +1,6 @@
 package simpledb.buffer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import simpledb.file.*;
@@ -33,6 +34,17 @@ class BasicBufferMgr {
       numAvailable = numbuffs;
       for (int i=0; i<numbuffs; i++)
          bufferpool[i] = new Buffer();
+      
+      PinUnpinListener lruStrategy = new LRUUnpinStrategy();
+      PinUnpinListener clockStrategy = new ClockUnpinStrategy();
+      PinUnpinListener fifoStrategy = new FIFOUnpinStrategy();
+      
+      pinUnpinListeners = new ArrayList<>();
+      pinUnpinListeners.add(lruStrategy);
+      pinUnpinListeners.add(clockStrategy);
+      pinUnpinListeners.add(fifoStrategy);
+      
+      setUnpinStrategy((ChooseUnpinnedBufferStrategy) lruStrategy);
    }
    
    /**
@@ -115,9 +127,19 @@ class BasicBufferMgr {
    }
    
    private Buffer chooseUnpinnedBuffer() {
+	  //Asks the replacement strategy to give a free buffer
+	  if(this.unpinStrategy != null) {
+		return unpinStrategy.chooseUnpinnedBuffer();  
+	  }
+	   	   
+	  //The default choice is the Naive strategy
       for (Buffer buff : bufferpool)
          if (!buff.isPinned())
          return buff;
       return null;
+   }
+   
+   private void setUnpinStrategy(ChooseUnpinnedBufferStrategy unpinStrategy) {
+	   this.unpinStrategy = unpinStrategy;
    }
 }
