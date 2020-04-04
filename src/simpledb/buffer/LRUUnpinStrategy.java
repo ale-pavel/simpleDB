@@ -2,9 +2,9 @@ package simpledb.buffer;
 
 public class LRUUnpinStrategy implements ChooseUnpinnedBufferStrategy, PinUnpinListener {
 	private Buffer[] bufferPool;
-	
+
 	public void create(Buffer[] bufferPool) {
-		
+
 	}
 
 	@Override

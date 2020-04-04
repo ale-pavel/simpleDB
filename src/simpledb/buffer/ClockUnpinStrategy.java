@@ -6,9 +6,9 @@ public class ClockUnpinStrategy implements ChooseUnpinnedBufferStrategy, PinUnpi
 	private Buffer[] bufferPool;
 	private int currentPosition;
 	private Deque<Buffer> unpinnedBufferQueue;
-	
+
 	public void create(Buffer[] bufferPool) {
-		
+
 	}
 
 	@Override

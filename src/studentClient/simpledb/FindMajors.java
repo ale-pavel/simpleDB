@@ -4,7 +4,7 @@ import java.sql.*;
 import simpledb.remote.SimpleDriver;
 
 public class FindMajors {
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 		String major = args[0];
 		System.out.println("Here are the " + major + " majors");
 		System.out.println("Name\tGradYear");
@@ -17,10 +17,8 @@ public class FindMajors {
 
 			// Step 2: execute the query
 			Statement stmt = conn.createStatement();
-			String qry = "select sname, gradyear "
-			           + "from student, dept "
-			           + "where did = majorid "
-			           + "and dname = '" + major + "'";
+			String qry = "select sname, gradyear " + "from student, dept " + "where did = majorid " + "and dname = '"
+					+ major + "'";
 			ResultSet rs = stmt.executeQuery(qry);
 
 			// Step 3: loop through the result set
@@ -30,17 +28,14 @@ public class FindMajors {
 				System.out.println(sname + "\t" + gradyear);
 			}
 			rs.close();
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			// Step 4: close the connection
 			try {
 				if (conn != null)
 					conn.close();
-			}
-			catch (SQLException e) {
+			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}

@@ -5,9 +5,9 @@ import java.util.TreeSet;
 public class FIFOUnpinStrategy implements ChooseUnpinnedBufferStrategy, PinUnpinListener {
 	private Buffer[] bufferPool;
 	private TreeSet<TimedBuffer> bufferQueue;
-	
+
 	public void create(Buffer[] bufferPool) {
-		
+
 	}
 
 	@Override
