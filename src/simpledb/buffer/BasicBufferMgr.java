@@ -76,6 +76,8 @@ class BasicBufferMgr {
 		if (!buff.isPinned())
 			numAvailable--;
 		buff.pin();
+		//Notify Listeners that the buffer has been pinned
+		notifyPinEvent(buff);
 		return buff;
 	}
 
@@ -94,6 +96,8 @@ class BasicBufferMgr {
 		buff.assignToNew(filename, fmtr);
 		numAvailable--;
 		buff.pin();
+		//Notify Listeners that the buffer has been pinned
+		notifyPinEvent(buff);
 		return buff;
 	}
 
@@ -106,6 +110,8 @@ class BasicBufferMgr {
 		buff.unpin();
 		if (!buff.isPinned())
 			numAvailable++;
+		//Notify Listeners that the buffer has been unpinned
+		notifyUnpinEvent(buff);
 	}
 
 	/**
@@ -141,5 +147,17 @@ class BasicBufferMgr {
 
 	private void setUnpinStrategy(ChooseUnpinnedBufferStrategy unpinStrategy) {
 		this.unpinStrategy = unpinStrategy;
+	}
+
+	private void notifyPinEvent(Buffer buff) {
+		for(PinUnpinListener listener : pinUnpinListeners) {
+			listener.pinned(buff);
+		}
+	}
+	
+	private void notifyUnpinEvent(Buffer buff) {
+		for(PinUnpinListener listener : pinUnpinListeners) {
+			listener.unpinned(buff);
+		}
 	}
 }
