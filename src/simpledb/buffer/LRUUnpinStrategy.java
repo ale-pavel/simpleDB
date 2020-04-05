@@ -38,7 +38,7 @@ public class LRUUnpinStrategy implements ChooseUnpinnedBufferStrategy, PinUnpinL
 	@Override
 	public Buffer chooseUnpinnedBuffer() {
 		//The first buffer was unpinned less recently
-		return unpinnedBufferQueue.pollFirst();
+		return unpinnedBufferQueue.getFirst();
 	}
 
 }
