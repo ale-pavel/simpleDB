@@ -33,17 +33,9 @@ class BasicBufferMgr {
 		numAvailable = numbuffs;
 		for (int i = 0; i < numbuffs; i++)
 			bufferpool[i] = new Buffer();
-
-		PinUnpinListener lruStrategy = new LRUUnpinStrategy();
-		PinUnpinListener clockStrategy = new ClockUnpinStrategy();
-		PinUnpinListener fifoStrategy = new FIFOUnpinStrategy();
-
-		pinUnpinListeners = new ArrayList<>();
-		pinUnpinListeners.add(lruStrategy);
-		pinUnpinListeners.add(clockStrategy);
-		pinUnpinListeners.add(fifoStrategy);
-
-		setUnpinStrategy((ChooseUnpinnedBufferStrategy) lruStrategy);
+		
+		//Creates the required strategies and listeners and instantiates them
+		instantiateStrategies();
 	}
 
 	/**
@@ -159,5 +151,28 @@ class BasicBufferMgr {
 		for(PinUnpinListener listener : pinUnpinListeners) {
 			listener.unpinned(buff);
 		}
+	}
+
+	private void instantiateStrategies() {
+		PinUnpinListener lruListener = new LRUUnpinStrategy();
+		PinUnpinListener clockListener = new ClockUnpinStrategy();
+		PinUnpinListener fifoListener = new FIFOUnpinStrategy();
+	
+		pinUnpinListeners = new ArrayList<>();
+		pinUnpinListeners.add(lruListener);
+		pinUnpinListeners.add(clockListener);
+		pinUnpinListeners.add(fifoListener);
+		
+		//Casting is necessary to be able to access create() methods
+		LRUUnpinStrategy lruStrategy = (LRUUnpinStrategy) lruListener;
+		ClockUnpinStrategy clockStrategy = (ClockUnpinStrategy) clockListener;
+		FIFOUnpinStrategy fifoStrategy = (FIFOUnpinStrategy) fifoListener;
+		
+		lruStrategy.create(this.bufferpool);
+		clockStrategy.create(this.bufferpool);
+		fifoStrategy.create(this.bufferpool);
+	
+		//Sets the buffer replacement strategy for the buffer manager
+		setUnpinStrategy(lruStrategy);
 	}
 }
